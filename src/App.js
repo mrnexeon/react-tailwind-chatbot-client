@@ -12,7 +12,7 @@ function App() {
   useEffect(() => {
     inputFieldRef.current.focus();
     fetchChats().then((data) => {
-      setChats(data);
+      setChats(data.reverse());
     }).catch((error) => {
       alert(`Error fetching chats, please try again later. ${error}`);
     });
@@ -66,7 +66,7 @@ function App() {
 
       sendMessage(input, chatId).then((response) => {
         if (!chatId) {
-          setChats([...chats, response.chat]);
+          setChats([response.chat, ...chats]);
         }
         setChatId(response.chat.id);
         setMessages([...messages, newMessage, response.message]);
