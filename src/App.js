@@ -64,9 +64,9 @@ function App() {
 
       sendMessage(input, chatId).then((response) => {
         if (!chatId) {
-          setChats([...chats, response.chat_id]);
+          setChats([...chats, response.chat]);
         }
-        setChatId(response.chat_id);
+        setChatId(response.chat.id);
         setMessages([...messages, newMessage, response.message]);
         scrollToBottom();
       });
@@ -76,6 +76,7 @@ function App() {
   };
 
   const openChat = (chatId) => {
+    console.log('Open chat:', chatId);
     setChatId(chatId);
     fetchChatHistory(chatId).then((data) => {
       setMessages(data);
@@ -139,13 +140,13 @@ function App() {
       >
         <div className="overflow-y-auto py-5 px-3 h-full bg-white dark:bg-gray-800">
           <ul className="space-y-2">
-            {chats.map((id, index) => (
+            {chats.map((chat, index) => (
               <li key={index}>
                 <div
-                  onClick={() => openChat(id)}
-                  className={`px-3 py-2 text-base cursor-pointer truncate text-ellipsis font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 ${chatId === id ? 'bg-gray-200 dark:bg-gray-700' : 'hover:bg-gray-200 dark:hover:bg-gray-600'}`}
+                  onClick={() => openChat(chat.id)}
+                  className={`px-3 py-2 text-base cursor-pointer truncate text-ellipsis font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 ${chatId === chat.id ? 'bg-gray-200 dark:bg-gray-700' : 'hover:bg-gray-200 dark:hover:bg-gray-600'}`}
                 >
-                  {id}
+                  {chat.title}
                 </div>
               </li>
             ))}
