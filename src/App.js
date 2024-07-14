@@ -7,8 +7,10 @@ function App() {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const messagesEndRef = useRef(null);
+  const inputFieldRef = useRef(null);
 
   useEffect(() => {
+    inputFieldRef.current.focus();
     fetchChats().then((data) => {
       setChats(data);
     }).catch((error) => {
@@ -81,12 +83,14 @@ function App() {
     fetchChatHistory(chatId).then((data) => {
       setMessages(data);
       scrollToBottom();
+      inputFieldRef.current.focus();
     });
   };
 
   const newChat = () => {
     setChatId(null);
     setMessages([]);
+    inputFieldRef.current.focus();
   };
 
   return (
@@ -207,6 +211,7 @@ function App() {
           <div className="flex items-center">
             <input
               type="text"
+              ref={inputFieldRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               className="flex-grow px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
