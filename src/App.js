@@ -63,6 +63,9 @@ function App() {
       scrollToBottom();
 
       sendMessage(input, chatId).then((response) => {
+        if (!chatId) {
+          setChats([...chats, response.chat_id]);
+        }
         setChatId(response.chat_id);
         setMessages([...messages, newMessage, response.message]);
         scrollToBottom();
