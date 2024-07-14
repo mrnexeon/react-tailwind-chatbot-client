@@ -143,7 +143,7 @@ function App() {
         id="drawer-navigation"
       >
         <div className="overflow-y-auto py-5 px-3 h-full bg-white dark:bg-gray-800">
-          <ul className="space-y-2">
+          {chats.length > 0 && <ul className="space-y-2">
             {chats.map((chat, index) => (
               <li key={index}>
                 <div
@@ -154,8 +154,8 @@ function App() {
                 </div>
               </li>
             ))}
-          </ul>
-          <ul className="pt-5 mt-5 space-y-2 border-t border-gray-200 dark:border-gray-700">
+          </ul>}
+          <ul className={`pt-5 space-y-2 ${chats.length > 0 ? 'mt-5 border-t border-gray-200 dark:border-gray-700' : ''}`}>
             <li>
               <div
                 className="flex items-center cursor-pointer p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group"
