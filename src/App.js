@@ -1,6 +1,26 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 
+function ChatBubble({ role, content }) {
+  return (
+    <div
+      className={`${role === 'user' ? 'col-start-1 col-end-8' : 'col-start-6 col-end-13'
+        } p-2 rounded-lg`}
+    >
+      <div className={`flex ${role === 'user' ? 'flex-row' : 'flex-row-reverse'} items-center`}>
+        <div className={`flex items-center justify-center h-10 w-10 rounded-full ${role === 'user' ? 'bg-indigo-300' : 'bg-indigo-500'} flex-shrink-0`}>
+          {role[0].toUpperCase()}
+        </div>
+        <div className={`relative ${role === 'user' ? 'ml-3' : 'mr-3'} text-sm ${role === 'user' ? 'bg-white dark:bg-cyan-900' : 'bg-blue-500 dark:bg-sky-900'} p-3 shadow rounded-xl`}>
+          <span className={`whitespace-pre-wrap ${role === 'user' ? 'text-black dark:text-white' : 'text-white'}`}>
+            {content}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function App() {
   const [chatId, setChatId] = useState(null);
   const [chats, setChats] = useState([]);
@@ -176,34 +196,9 @@ function App() {
           <div className="flex flex-col h-full overflow-x-auto mb-6">
             <div className="flex flex-col h-full">
               <div className="grid grid-cols-12 gap-y-2 px-2">
-                {messages.map((message, index) => (
-                  <div
-                    key={index}
-                    className={`${message.role === 'user' ? 'col-start-1 col-end-8' : 'col-start-6 col-end-13'
-                      } p-2 rounded-lg`}
-                  >
-                    <div className={`flex ${message.role === 'user' ? 'flex-row' : 'flex-row-reverse'} items-center`}>
-                      <div
-                        className={`flex items-center justify-center h-10 w-10 rounded-full ${message.role === 'user' ? 'bg-indigo-300' : 'bg-indigo-500'
-                          } flex-shrink-0`}
-                      >
-                        {message.role[0].toUpperCase()}
-                      </div>
-                      <div
-                        className={`relative ${message.role === 'user' ? 'ml-3' : 'mr-3'
-                          } text-sm ${message.role === 'user' ? 'bg-white dark:bg-cyan-900' : 'bg-blue-500 dark:bg-sky-900'
-                          } p-3 shadow rounded-xl`}
-                      >
-                        <span
-                          className={`whitespace-pre-wrap ${message.role === 'user' ? 'text-black dark:text-white' : 'text-white'
-                            }`}
-                        >
-                          {message.content.map(block => block.text).join('\n')}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                {messages.map((message, index) =>
+                  <ChatBubble key={index} role={message.role} content={message.content.map(block => block.text).join('\n')} />
+                )}
                 <div ref={messagesEndRef} />
               </div>
             </div>
