@@ -62,6 +62,19 @@ const ChatInput = forwardRef(({ onSendMessage }, ref) => {
   );
 });
 
+function NavItem({ children, active, onClick }) {
+  return (
+    <li>
+      <div
+        className={`flex items-center cursor-pointer px-3 py-2 text-base font-medium text-gray-900 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group ${active ? 'bg-gray-200 dark:bg-gray-700' : ''}`}
+        onClick={onClick}
+      >
+        {children}
+      </div>
+    </li>
+  );
+}
+
 function App() {
   const [chatId, setChatId] = useState(null);
   const [chats, setChats] = useState([]);
@@ -201,28 +214,23 @@ function App() {
         <div className="overflow-y-auto py-5 px-3 h-full bg-white dark:bg-gray-800">
           {chats.length > 0 && <ul className="space-y-2">
             {chats.map((chat, index) => (
-              <li key={index}>
-                <div
-                  onClick={() => openChat(chat.id)}
-                  className={`px-3 py-2 text-base cursor-pointer truncate text-ellipsis font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 ${chatId === chat.id ? 'bg-gray-200 dark:bg-gray-700' : 'hover:bg-gray-200 dark:hover:bg-gray-600'}`}
-                >
+              <NavItem key={index} active={chatId === chat.id} onClick={() => openChat(chat.id)}>
+                <span className="truncate text-ellipsis">
                   {chat.title}
-                </div>
-              </li>
+                </span>
+              </NavItem>
             ))}
           </ul>}
           <ul className={`pt-5 space-y-2 ${chats.length > 0 ? 'mt-5 border-t border-gray-200 dark:border-gray-700' : ''}`}>
-            <li>
-              <div
-                className="flex items-center cursor-pointer p-2 text-base font-medium text-gray-900 rounded-lg transition duration-75 hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group"
-                onClick={() => newChat()}
-              >
-                <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 17h6l3 3v-3h2V9h-2M4 4h11v8H9l-3 3v-3H4V4Z" />
-                </svg>
-                <span className="ml-3">New chat</span>
-              </div>
-            </li>
+
+            <NavItem active={!chatId} onClick={() => newChat()}>
+              <svg className="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 17h6l3 3v-3h2V9h-2M4 4h11v8H9l-3 3v-3H4V4Z" />
+              </svg>
+              <span className="ml-3 truncate text-ellipsis">
+                New chat
+              </span>
+            </NavItem>
           </ul>
         </div>
       </aside>
