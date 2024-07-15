@@ -3,10 +3,7 @@ import './App.css';
 
 function ChatBubble({ role, content }) {
   return (
-    <div
-      className={`${role === 'user' ? 'col-start-1 col-end-8' : 'col-start-6 col-end-13'
-        } p-2 rounded-lg`}
-    >
+    <div className={`${role === 'user' ? 'col-start-1 col-end-8' : 'col-start-6 col-end-13'} p-2 rounded-lg`}>
       <div className={`flex ${role === 'user' ? 'flex-row' : 'flex-row-reverse'} items-center`}>
         <div className={`flex items-center justify-center h-10 w-10 rounded-full ${role === 'user' ? 'bg-indigo-300' : 'bg-indigo-500'} flex-shrink-0`}>
           {role[0].toUpperCase()}
@@ -75,7 +72,17 @@ function NavItem({ children, active, onClick }) {
   );
 }
 
+function DrawerBackdrop({ onClick }) {
+  return (
+    <div
+      className="fixed inset-0 z-30 bg-black opacity-50"
+      onClick={onClick}
+    ></div>
+  );
+}
+
 function App() {
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const [chatId, setChatId] = useState(null);
   const [chats, setChats] = useState([]);
   const [messages, setMessages] = useState([]);
@@ -147,8 +154,8 @@ function App() {
   };
 
   const openChat = (chatId) => {
-    console.log('Open chat:', chatId);
     setChatId(chatId);
+    setDrawerOpen(false);
     fetchChatHistory(chatId).then((data) => {
       setMessages(data);
       scrollToBottom();
@@ -162,20 +169,21 @@ function App() {
     inputFieldRef.current.focus();
   };
 
+  const toggleDrawer = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+
   return (
     <div className="antialiased bg-gray-50 dark:bg-gray-900">
-      <nav className="bg-white border-b border-gray-200 px-8 py-4 dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0 z-50">
-        <div className="flex flex-wrap justify-between items-center">
+      <nav className="bg-white border-b border-gray-200 px-8 py-4 dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0 z-50 h-16">
           <div className="flex justify-start items-center">
             <button
-              data-drawer-target="drawer-navigation"
-              data-drawer-toggle="drawer-navigation"
-              aria-controls="drawer-navigation"
-              className="p-2 mr-2 text-gray-600 rounded-lg cursor-pointer md:hidden hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700 focus:ring-2 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              className="p-1 mr-1 text-gray-600 rounded-lg cursor-pointer md:hidden hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700 focus:ring-2 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+              onClick={toggleDrawer}
             >
               <svg
                 aria-hidden="true"
-                className="w-6 h-6"
+                className="w-5 h-5"
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
@@ -188,15 +196,15 @@ function App() {
               </svg>
               <span className="sr-only">Toggle sidebar</span>
             </button>
-            <span className="self-center font-semibold whitespace-nowrap dark:text-white">Chatbot</span>
-          </div>
+            <span className="p-1 font-semibold whitespace-nowrap dark:text-white">Chatbot</span>
         </div>
       </nav>
 
+      {drawerOpen && <DrawerBackdrop onClick={toggleDrawer} />}
+
       <aside
-        className="fixed top-0 left-0 z-40 w-64 h-screen pt-14 transition-transform -translate-x-full bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+        className={`fixed top-0 left-0 z-40 w-64 h-screen pt-14 transition-transform ${drawerOpen ? 'translate-x-0' : '-translate-x-full'} bg-white border-r border-gray-200 md:translate-x-0 dark:bg-gray-800 dark:border-gray-700`}
         aria-label="Sidenav"
-        id="drawer-navigation"
       >
         <div className="overflow-y-auto py-5 px-3 h-full bg-white dark:bg-gray-800">
           {chats.length > 0 && <ul className="space-y-2">
