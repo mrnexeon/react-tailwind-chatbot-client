@@ -21,6 +21,16 @@ function ChatBubble({ role, content }) {
   );
 }
 
+function ChatMessages({ messages }) {
+  return (
+    <div className="grid grid-cols-12 gap-y-2 px-2">
+      {messages.map((message, index) =>
+        <ChatBubble key={index} role={message.role} content={message.content.map(block => block.text).join('\n')} />
+      )}
+    </div>
+  );
+}
+
 function App() {
   const [chatId, setChatId] = useState(null);
   const [chats, setChats] = useState([]);
@@ -192,17 +202,16 @@ function App() {
       </aside>
 
       <main className="p-4 md:ml-64 pt-20 dark:text-white h-screen">
+
+        {/* Chat */}
         <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl h-full py-2 px-4">
-          <div className="flex flex-col h-full overflow-x-auto mb-6">
-            <div className="flex flex-col h-full">
-              <div className="grid grid-cols-12 gap-y-2 px-2">
-                {messages.map((message, index) =>
-                  <ChatBubble key={index} role={message.role} content={message.content.map(block => block.text).join('\n')} />
-                )}
-                <div ref={messagesEndRef} />
-              </div>
-            </div>
+
+          <div className="h-full overflow-x-auto mb-6">
+            <ChatMessages messages={messages} />
+            <div ref={messagesEndRef} />
           </div>
+
+          {/* Chat Input Form */}
           <div className="flex items-center">
             <input
               type="text"
@@ -219,7 +228,9 @@ function App() {
               Send
             </button>
           </div>
+
         </div>
+
       </main>
     </div>
   );
