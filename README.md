@@ -39,3 +39,7 @@ In the project directory, you can run:
 You can utilize Amazon Amplify Hosting to easily deploy this client. Follow the Amplify instructions by the [link](https://aws.amazon.com/getting-started/hands-on/build-react-app-amplify-graphql/module-one/).
 
 Specify the `REACT_APP_RESTAPI_ENDPOINT` variable to your deployed [serverless-amazon-bedrock-fastapi](https://github.com/mrnexeon/serverless-amazon-bedrock-fastapi) backend.
+
+## TODO:
+
+- [ ] Improve the UI for mobile screens
